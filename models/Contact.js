@@ -1,11 +1,11 @@
 import mongoose from "mongoose"
 
 const contactSchema = new mongoose.Schema({
-    userNmae:String,
-    number:Number,
-    countryCode:String
+    userName:String,
+    countryCode:String,
+    number:Number
 }) 
 
-const contact = mongoose.model("Contact",contactSchema)
+const Contact = mongoose.model("Contact",contactSchema)
 
-export default contact
+export default Contact
