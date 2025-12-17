@@ -23,10 +23,16 @@ const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
 
+const formMessage = document.getElementById("formMessage");
 
 // create or edit
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // reset message
+    formMessage.textContent = "";
+    formMessage.className = "form-message";
 
     const data = {
         userName: userName.value,
@@ -36,29 +42,51 @@ form.addEventListener("submit", async (e) => {
 
     // edit
     if (editngId) {
-        await fetch(`${API_URL}/${editngId}`, {
+        const res = await fetch(`${API_URL}/${editngId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
 
+        const result = await res.json();
+
+        if (!res.ok) {
+            formMessage.textContent = result.message;
+            formMessage.classList.add("error");
+            return;
+        }
+
+        formMessage.textContent = "Contact updated successfully";
+        formMessage.classList.add("success");
+
         editngId = null;
         form.reset();
         loadContacts();
     }
+
     // create
     else {
-        await fetch(API_URL, {
+        const res = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
 
+        const result = await res.json();
+
+        if (!res.ok) {
+            formMessage.textContent = result.message;
+            formMessage.classList.add("error");
+            return;
+        }
+
+        formMessage.textContent = "Contact added successfully";
+        formMessage.classList.add("success");
+
         form.reset();
         loadContacts();
     }
 });
-
 
 // read
 async function loadContacts() {
@@ -73,7 +101,6 @@ async function loadContacts() {
     }
 }
 
-
 // filter by countryCode
 function populateCountryFilter() {
     const codes = [...new Set(allContacts.map(c => c.countryCode))];
@@ -84,7 +111,6 @@ function populateCountryFilter() {
         countryFilter.innerHTML += `<option value="${code}">${code}</option>`;
     });
 }
-
 
 // search, filter
 function applyFilters() {
@@ -109,7 +135,6 @@ function applyFilters() {
     currentPage = 1;
     renderPage();
 }
-
 
 // pagination
 function renderPage() {
@@ -140,7 +165,6 @@ function renderPage() {
     nextBtn.disabled = currentPage === totalPages;
 }
 
-
 // pagination buttons
 prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
@@ -156,11 +180,9 @@ nextBtn.addEventListener("click", () => {
     }
 });
 
-
 // search , filter events
 searchInput.addEventListener("input", applyFilters);
 countryFilter.addEventListener("change", applyFilters);
-
 
 // edit
 function editContact(id) {
@@ -175,7 +197,6 @@ function editContact(id) {
         })
         .catch(error => console.error(error));
 }
-
 
 // delete
 async function deleteContact(id) {
