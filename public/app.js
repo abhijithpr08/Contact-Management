@@ -1,4 +1,5 @@
 const API_URL = "/api/contacts"
+let editngId = null
 
 const form = document.getElementById("contactForm")
 const tBody = document.getElementById("tBody")
@@ -8,36 +9,53 @@ const number = document.getElementById("number")
 
 //create
 form.addEventListener("submit", async (e) => {
-    
     e.preventDefault()
     const data = {
         userName: userName.value,
         countryCode: countryCode.value,
         number: number.value
     }
-    
-    await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-    })
-    console.log("data added",data)
-    loadContacts()
+    //edit
+    if (editngId) {
+        await fetch(`${API_URL}/${editngId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+
+        editngId = null;
+        form.reset();
+        loadContacts();
+    }
+
+    //create
+    else {
+        await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        console.log("data added", data)
+        loadContacts()
+    }
 })
 
 //read
-async function loadContacts (){
-    try{
+async function loadContacts() {
+    try {
         // console.log("heyy")
         const res = await fetch(API_URL)
-        const data = await res.json() 
-        console.log(res,"---res")
-        console.log(data,"--data")
-        tBody.innerHTML=``;
+        const data = await res.json()
+        // console.log(res,"---res")
+        // console.log(data,"--data")
+        tBody.innerHTML = ``;
         data.forEach((contact) => {
-        tBody.innerHTML += `
+            tBody.innerHTML += `
         <tr>
             <td>${contact.userName}</td>
             <td>${contact.countryCode}</td>
@@ -48,17 +66,36 @@ async function loadContacts (){
             </td>
         </tr>
         `;
-      });
+        });
     }
-    catch(error){
+    catch (error) {
         console.error(error)
     }
 }
 loadContacts()
 
-function deleteContact(id) {
-    fetch(`${API_URL}/${id}`, {
-         method: "DELETE",
-    })
+//edit
+function editContact(id) {
+    fetch(`${API_URL}/${id}`)
+        .then((res) => res.json())
+        .then((contact) => {
+            console.log("editing", contact);
+
+            userName.value = contact.userName;
+            countryCode.value = contact.countryCode;
+            number.value = contact.number;
+
+            editngId = id;
+        })
+        .catch((error) => console.error(error));
+}
+
+
+//delete
+async function deleteContact(id) {
+    await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+    });
+
     loadContacts();
 }
