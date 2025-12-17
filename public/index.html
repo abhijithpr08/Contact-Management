@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <form id="contactForm">
         <div class="form-group">
@@ -29,27 +31,44 @@
         <button type="submit" id="addButton">Add</button>
     </form>
     <section class="table-section">
-                <div class="table-container">
-                    <div class="table-header">
-                        <h2>Contact Records</h2>
-                    </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Contact Records</h2>
 
-                    <div class="table-responsive">
-                        <table id="contactsTable" class="contacts-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Country Code</th>
-                                    <th>Phone Number</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tBody"></tbody>
-                        </table>
-                    </div>
+                <div class="table-controls">
+                    <input type="text" id="searchInput" placeholder="Search by name or number...">
+
+                    <select id="countryFilter">
+                        <option value="">All Country Codes</option>
+                    </select>
                 </div>
-            </section>
+            </div>
+
+
+
+            <div class="table-responsive">
+                <table id="contactsTable" class="contacts-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Country Code</th>
+                            <th>Phone Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tBody"></tbody>
+                </table>
+                <div class="pagination">
+                    <button id="prevBtn">Prev</button>
+                    <span id="pageInfo"></span>
+                    <button id="nextBtn">Next</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <script src="app.js"></script>
 </body>
+
 </html>

@@ -62,6 +62,38 @@ button:hover {
     margin-top: 30px;
 }
 
+/* Search & Filter Controls */
+.table-controls {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#countryFilter {
+    width: 180px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#searchInput:focus,
+#countryFilter:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+
 .table-container {
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -149,4 +181,21 @@ button:hover {
 
 .delete-btn:hover {
     background-color: #c82333;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.pagination button {
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.pagination span {
+    font-weight: bold;
 }
