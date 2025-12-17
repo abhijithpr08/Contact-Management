@@ -54,3 +54,99 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+/* Table Section Styling - matching contactForm */
+.table-section {
+    width: 50%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.table-container {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.table-header {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.contacts-table th,
+.contacts-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.contacts-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.contacts-table td {
+    color: #333;
+    text-align: left;
+}
+
+.contacts-table td:nth-child(2),
+.contacts-table td:nth-child(3) {
+    text-align: center;
+}
+
+.contacts-table td:last-child {
+    text-align: center;
+}
+
+.contacts-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.contacts-table tbody tr:hover {
+    background-color: #e3f2fd;
+    transition: background-color 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #218838;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}

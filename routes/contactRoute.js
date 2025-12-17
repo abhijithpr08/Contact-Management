@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.post("/",addContact)
 router.get("/",getContact)
-router.put("/",editContact)
-router.delete("/",deleteContact)
+router.put("/:id",editContact)
+router.delete("/:id",deleteContact)
 
 export default router
