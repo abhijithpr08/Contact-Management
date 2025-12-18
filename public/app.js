@@ -45,7 +45,7 @@ function validateAndFormatContact() {
     }
 
     // country code validation (2 or 3 digits)
-    if (!/^\d{2,3}$/.test(code)) {
+    if (!/^\d{1,3}$/.test(code)) {
         return {
             error: "Please enter valid Country code"
         };
