@@ -7,7 +7,7 @@ let editngId = null;
 let allContacts = [];
 let filteredContacts = [];
 let currentPage = 1;
-const limit = 20;
+const limit = 5;
 
 // form elements
 const form = document.getElementById("contactForm");
