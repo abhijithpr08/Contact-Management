@@ -15,6 +15,7 @@ const tBody = document.getElementById("tBody");
 const userName = document.getElementById("username");
 const countryCode = document.getElementById("countryCode");
 const number = document.getElementById("number");
+const submitBtn = document.getElementById("addButton");
 
 // search, filter elements
 const searchInput = document.getElementById("searchInput");
@@ -88,28 +89,33 @@ form.addEventListener("submit", async (e) => {
     };
 
     // edit
-    if (editngId) {
-        const res = await fetch(`${API_URL}/${editngId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
+    // edit
+if (editngId) {
+    const res = await fetch(`${API_URL}/${editngId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
 
-        const result = await res.json();
+    const result = await res.json();
 
-        if (!res.ok) {
-            formMessage.textContent = result.message;
-            formMessage.classList.add("error");
-            return;
-        }
-
-        formMessage.textContent = "Contact updated successfully";
-        formMessage.classList.add("success");
-
-        editngId = null;
-        form.reset();
-        loadContacts();
+    if (!res.ok) {
+        formMessage.textContent = result.message;
+        formMessage.classList.add("error");
+        return;
     }
+
+    formMessage.textContent = "Contact updated successfully";
+    formMessage.classList.add("success");
+
+    // reset edit state
+    editngId = null;
+    form.reset();
+
+    submitBtn.textContent = "Add";
+
+    loadContacts();
+}
 
     // create
     else {
@@ -251,10 +257,11 @@ function editContact(id) {
         .then(res => res.json())
         .then(contact => {
             userName.value = contact.userName;
-            countryCode.value = contact.countryCode;
+            countryCode.value = contact.countryCode.replace("+", "");
             number.value = contact.number;
 
             editngId = id;
+            submitBtn.textContent = "Update";
         })
         .catch(error => console.error(error));
 }
