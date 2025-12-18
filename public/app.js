@@ -268,8 +268,13 @@ function editContact(id) {
 
 // delete
 async function deleteContact(id) {
-    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    loadContacts();
+    // Show confirmation dialog
+    const confirmDelete = confirm("Are you sure you want to delete this contact? This action cannot be undone.");
+
+    if (confirmDelete) {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        loadContacts();
+    }
 }
 sortSelect.addEventListener("change", applyFilters);
 
