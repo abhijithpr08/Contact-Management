@@ -26,8 +26,46 @@ const pageInfo = document.getElementById("pageInfo");
 
 const formMessage = document.getElementById("formMessage");
 
-// create or edit
+function validateAndFormatContact() {
+    let name = userName.value.trim();
+    let code = countryCode.value.trim();
+    let phone = number.value.trim();
 
+    // USERNAME validation (4–10 letters only)
+    if (!/^[A-Za-z]{4,10}$/.test(name)) {
+        return {
+            error: "Username must be 4-10 letters only"
+        };
+    }
+
+    // remove + if user pastes it
+    if (code.startsWith("+")) {
+        code = code.slice(1);
+    }
+
+    // country code validation (2 or 3 digits)
+    if (!/^\d{2,3}$/.test(code)) {
+        return {
+            error: "Please enter valid Country code"
+        };
+    }
+
+    // phone number validation (exactly 10 digits)
+    // phone number validation (10 digits, starts with 6–9)
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+        return {
+            error: "Please enter valid Number"
+        };
+    }
+
+    return {
+        userName: name,
+        countryCode: `+${code}`,
+        number: phone
+    };
+}
+
+// create or edit
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -35,10 +73,18 @@ form.addEventListener("submit", async (e) => {
     formMessage.textContent = "";
     formMessage.className = "form-message";
 
+    const validated = validateAndFormatContact();
+
+    if (validated.error) {
+        formMessage.textContent = validated.error;
+        formMessage.classList.add("error");
+        return;
+    }
+
     const data = {
-        userName: userName.value,
-        countryCode: countryCode.value,
-        number: number.value,
+        userName: validated.userName,
+        countryCode: validated.countryCode,
+        number: validated.number
     };
 
     // edit
@@ -120,8 +166,8 @@ function applySort() {
     filteredContacts.sort((a, b) => {
         const dateA = new Date(a.createdAt);
         const dateB = new Date(b.createdAt);
-console.log("SORT:", sortSelect.value);
-console.log("DATES:", filteredContacts.map(c => c.createdAt));
+        console.log("SORT:", sortSelect.value);
+        console.log("DATES:", filteredContacts.map(c => c.createdAt));
 
         return sortValue === "newest"
             ? dateB - dateA
@@ -175,8 +221,9 @@ function renderPage() {
     const totalPages = Math.ceil(filteredContacts.length / limit) || 1;
     pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
 
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
+    prevBtn.style.display = currentPage === 1 ? "none" : "inline-block";
+    nextBtn.style.display = currentPage === totalPages ? "none" : "inline-block";
+
 }
 
 // pagination buttons
