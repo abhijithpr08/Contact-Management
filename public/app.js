@@ -19,6 +19,7 @@ const number = document.getElementById("number");
 // search, filter elements
 const searchInput = document.getElementById("searchInput");
 const countryFilter = document.getElementById("countryFilter");
+const sortSelect = document.getElementById("sortSelect");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
@@ -112,6 +113,22 @@ function populateCountryFilter() {
     });
 }
 
+// sort
+function applySort() {
+    const sortValue = sortSelect.value;
+
+    filteredContacts.sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+console.log("SORT:", sortSelect.value);
+console.log("DATES:", filteredContacts.map(c => c.createdAt));
+
+        return sortValue === "newest"
+            ? dateB - dateA
+            : dateA - dateB;
+    });
+}
+
 // search, filter
 function applyFilters() {
     const searchValue = searchInput.value.trim().toLowerCase();
@@ -122,16 +139,13 @@ function applyFilters() {
         const phone = contact.number?.toString() || "";
         const code = contact.countryCode || "";
 
-        const matchesSearch =
-            name.includes(searchValue) ||
-            phone.includes(searchValue);
-
-        const matchesCountry =
-            selectedCountry === "" || code === selectedCountry;
-
-        return matchesSearch && matchesCountry;
+        return (
+            (name.includes(searchValue) || phone.includes(searchValue)) &&
+            (selectedCountry === "" || code === selectedCountry)
+        );
     });
 
+    applySort();
     currentPage = 1;
     renderPage();
 }
@@ -203,5 +217,6 @@ async function deleteContact(id) {
     await fetch(`${API_URL}/${id}`, { method: "DELETE" });
     loadContacts();
 }
+sortSelect.addEventListener("change", applyFilters);
 
 loadContacts();

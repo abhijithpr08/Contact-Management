@@ -1,28 +1,25 @@
 import Contact from "../models/Contact.js"
 
 export const addContact = async (req, res) => {
-  try {
-    let { userName, countryCode, number } = req.body;
+    try {
+        const { userName, countryCode, number } = req.body;
 
-    number = number.replace(/\s+/g, "");
-    countryCode = countryCode.trim();
+        const newContact = await Contact.create({
+            userName,
+            countryCode,
+            number,
+        });
 
-    const newContact = await Contact.create({
-      userName,
-      countryCode,
-      number,
-    });
+        res.status(201).json(newContact);
+    } catch (error) {
+        if (error.code === 11000) {
+            return res
+                .status(400)
+                .json({ message: "This country code and number already exist" });
+        }
 
-    res.status(201).json(newContact);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message: "This number already exists for this country code",
-      });
+        res.status(500).json({ message: error.message });
     }
-
-    res.status(500).json({ message: error.message });
-  }
 };
 
 export const getContact = async (req, res) => {
@@ -36,29 +33,24 @@ export const getContact = async (req, res) => {
 }
 
 export const editContact = async (req, res) => {
-  try {
-    if (req.body.number) {
-      req.body.number = req.body.number.replace(/\s+/g, "");
+    try {
+        const updatedContact = await Contact.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        res.json(updatedContact);
+    } catch (error) {
+        if (error.code === 11000) {
+            return res
+                .status(400)
+                .json({ message: "This country code and number already exist" });
+        }
+
+        res.status(500).json({ message: error.message });
     }
-
-    const editedContact = await Contact.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    res.status(200).json(editedContact);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message: "This number already exists for this country code",
-      });
-    }
-
-    res.status(400).json({ message: error.message });
-  }
 };
-
 
 export const getSingleContact = async (req, res) => {
   try {
